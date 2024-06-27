@@ -3,8 +3,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import os from 'node:os';
-import fs from 'node:fs';
-import sharp from 'sharp';
+import sharpApi from './sharp-api.js';
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -85,7 +84,6 @@ async function createWindow() {
 app.whenReady().then(async () => {
   await createWindow();
   registerEvent();
-  testCode();
 });
 
 app.on('window-all-closed', () => {
@@ -126,65 +124,12 @@ const registerEvent = () => {
       return null;
     }
   });
-  ipcMain.handle('api:format', async (e, options) => {
-    return await apiFormat(options);
-  });
+  ipcMain.handle('api:format', sharpApi.apiFormat);
 
-  ipcMain.handle('api:getImgUrl', async (e, options) => {
-    return await apiGetImgUrl(options);
-  });
+  ipcMain.handle('api:getImgUrl', sharpApi.apiGetImgUrl);
+
+  ipcMain.handle('api:watermark', sharpApi.apiWatermark);
 };
 
-const apiFormat = (options) => {
-  return new Promise((resolve, reject) => {
-    const { id, filePath, formatType, fileOut } = options;
-    if (!filePath) {
-      reject({ message: '请传入文件路径' });
-    }
-    if (!fs.existsSync(filePath)) {
-      reject({ message: '文件不存在' });
-    }
-    const fileName = path.basename(filePath);
-    const toFileName = `${fileOut}\\${fileName.replace(/\.\w+$/, `.${formatType}`)}`;
-    sharp(filePath)
-      .toFormat(formatType)
-      .toFile(toFileName, (err, info) => {
-        if (err) {
-          reject(err);
-        }
-        resolve({
-          outputFilePath: toFileName,
-          id,
-          ...info,
-        });
-      });
-  });
-};
-
-const apiGetImgUrl = (options) => {
-  return new Promise(async (resolve, reject) => {
-    const { filePath, fileType } = options;
-    if (!filePath) {
-      reject({ message: '请传入文件路径' });
-    }
-    if (!fs.existsSync(filePath)) {
-      reject({ message: '文件不存在' });
-    }
-    const bitmap = fs.readFileSync(filePath);
-    const b64 = Buffer.from(bitmap).toString('base64');
-    resolve(b64);
-  });
-};
-
-const testCode = () => {
-  // const aa = 'D:\\node-projects\\img-operation-test\\1.jpeg';
-  // const sharp = require('sharp');
-  // sharp(aa)
-  //   .toFormat('png')
-  //   .toFile(
-  //     'D:\\node-projects\\img-operation-test\\output.png',
-  //     (err, info) => {
-  //       console.log(info);
-  //     }
-  //   );
-};
+const test = async () => {};
+test();

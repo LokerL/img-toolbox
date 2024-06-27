@@ -1,3 +1,5 @@
+import { isProxy, isRef, toRaw, toRef, unref } from 'vue';
+
 export const imageTypes = [
   'jpeg',
   'png',
@@ -33,12 +35,56 @@ export const selectDir = async () => {
   });
 };
 
-export const generateRandomString = (length) => {
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const _chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+function randomString(length, chars = _chars) {
   let result = '';
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
+  for (let i = length; i > 0; --i)
+    result += chars[Math.floor(Math.random() * chars.length)];
   return result;
+}
+
+export const getID = (length = 10) => {
+  return randomString(length);
+};
+
+// 去除响应式
+export const removeReactive = (obj) => {
+  const res = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      res[key] = toRaw(unref(obj[key]));
+    }
+  }
+  return JSON.parse(JSON.stringify(res));
+
+  // const res = {};
+  //
+  // for (const key in obj) {
+  //   if (Object.prototype.hasOwnProperty.call(obj, key)) {
+  //     if (isRef(obj[key])) {
+  //       res[key] = removeReactive(unref(obj[key]));
+  //     } else if (isProxy(obj[key])) {
+  //       res[key] = removeReactive(toRaw(obj[key]));
+  //     } else if (typeof obj[key] === 'object') {
+  //       res[key] = removeReactive(obj[key]);
+  //     }
+  //     // 如果是数组
+  //     else if (Array.isArray(obj[key])) {
+  //       res[key] = obj[key].map((item) => {
+  //         if (isRef(item)) {
+  //           return removeReactive(unref(item));
+  //         } else if (isProxy(item)) {
+  //           return removeReactive(toRaw(item));
+  //         } else if (typeof item === 'object') {
+  //           return removeReactive(item);
+  //         } else {
+  //           return item;
+  //         }
+  //       });
+  //     } else {
+  //       res[key] = obj[key];
+  //     }
+  //   }
+  // }
+  // return res;
 };

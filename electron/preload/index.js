@@ -12,4 +12,5 @@ contextBridge.exposeInMainWorld('dialog', {
 contextBridge.exposeInMainWorld('api', {
   format: (options) => ipcRenderer.invoke('api:format', options),
   getImgUrl: (options) => ipcRenderer.invoke('api:getImgUrl', options),
+  watermark: (options) => ipcRenderer.invoke('api:watermark', options),
 });

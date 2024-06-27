@@ -1,43 +1,82 @@
 <script setup>
-  import { onMounted, ref } from 'vue';
-
-  defineProps({
+  const props = defineProps({
+    // 触发的元素，按钮或者输入框 button | input
+    element: {
+      type: String,
+      default: 'button',
+    },
+    // 选择类型 file | folder
+    type: {
+      type: String,
+      default: 'file',
+    },
+    // 是否多选
     multiple: {
       type: Boolean,
       default: true,
     },
-    accept: {
+    // 文件类型
+    filters: {
       type: Array,
-      default: ['image/png'],
+      default: [],
     },
-    isDirectory: {
-      type: Boolean,
-      default: false,
+    style: {
+      type: Object,
+      default: () => ({
+        fontsize: '12px',
+      }),
+    },
+    size: {
+      type: String,
+      default: 'medium',
     },
   });
-  const emit = defineEmits(['fileChange']);
-  const fileInputEle = ref(null);
+  let selectorResult = defineModel('selectorResult');
 
-  const uploadBtnClick = () => {
-    fileInputEle.value.click();
-  };
-  const fileChangeHandler = (e) => {
-    emit('fileChange', e.target.files);
+  const handleClick = async () => {
+    const p = [];
+    props.type === 'folder' ? p.push('openDirectory') : p.push('openFile');
+    props.multiple && p.push('multiSelections');
+    const title = props.type === 'folder' ? '选择文件夹' : '选择文件';
+    const res = await window.dialog.openFile({
+      title,
+      properties: p,
+      filters: props.filters,
+    });
+    if (res) {
+      if (props.multiple) {
+        selectorResult.value = res;
+      } else {
+        selectorResult.value = res[0];
+      }
+    }
   };
 </script>
 
 <template>
   <div class="file-selector-wrapper">
-    <input
-      ref="fileInputEle"
-      type="file"
-      :multiple="multiple"
-      :accept="accept.join(',')"
-      style="display: none"
-      :webkitdirectory="isDirectory"
-      @change="fileChangeHandler"
-    />
-    <a-button type="primary" size="small" @click="uploadBtnClick">
+    <a-tooltip
+      v-if="element === 'input'"
+      :content="selectorResult"
+      position="top"
+      mini
+    >
+      <a-input
+        :style="style"
+        v-model="selectorResult"
+        placeholder="输出文件夹"
+        allow-clear
+        readonly
+        @click="handleClick"
+        :size="size"
+      >
+        <template #prefix>
+          <icon-folder />
+        </template>
+      </a-input>
+    </a-tooltip>
+
+    <a-button v-else type="primary" @click="handleClick">
       <template #icon> <icon-upload /> </template>
       <template #default>选择</template>
     </a-button>
@@ -46,6 +85,7 @@
 
 <style scoped>
   .file-selector-wrapper {
+    margin-right: 10px;
     display: inline-block;
   }
 </style>
