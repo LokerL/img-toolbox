@@ -36,7 +36,7 @@ const indexHtml = path.join(RENDERER_DIST, 'index.html');
 async function createWindow() {
   win = new BrowserWindow({
     title: 'ImgToolbox',
-    icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
+    icon: path.join(process.env.VITE_PUBLIC, 'logo.png'),
     titleBarStyle: 'hidden',
     width: 800,
     height: 580,

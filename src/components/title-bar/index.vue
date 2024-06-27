@@ -4,7 +4,10 @@
 
 <template>
   <div class="title-bar">
-    <div class="title">图片工具箱</div>
+    <div class="title">
+      <a-image width="20" src="/logo.svg" />
+      <span style="margin-left: 5px">图片工具箱</span>
+    </div>
     <switch-mode />
   </div>
 </template>
@@ -26,5 +29,12 @@
     user-select: none;
     /* 设置该属性表明这是可拖拽区域，用来移动窗口 */
     -webkit-app-region: drag;
+
+    .title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+    }
   }
 </style>
