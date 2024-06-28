@@ -37,7 +37,7 @@ jobs:
       - name: Build Release Files
         run: npm run build
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
@@ -45,3 +45,16 @@ jobs:
           name: img-toolbox-${{ matrix. os }}
           path: release/*/*.exe
           retention-days: 5
+
+      - name: release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+           dist/*.exe
+           dist/*.exe.blockmap
+           dist/latest.yml
+           draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      
+          
