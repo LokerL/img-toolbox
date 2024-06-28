@@ -16,7 +16,7 @@
 <style scoped>
   .title-bar {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     flex-shrink: 0;
     padding: 0 20px;
