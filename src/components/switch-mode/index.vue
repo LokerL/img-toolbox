@@ -33,13 +33,15 @@
 
 <style scoped>
   .toggle-dark-btn {
-    height: 100%;
-    width: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 170px;
+    border-right: 170px;
     -webkit-app-region: no-drag;
+    float: right;
+    height: 30px;
+    border-radius: 50%;
+    width: 30px;
     &:hover {
       cursor: pointer;
       background-color: var(--color-fill-2);

@@ -168,32 +168,6 @@ const apiWatermark = async (e, options) => {
           ...info,
         });
       });
-
-    // const allResult = await Promise.allSettled(
-    //   files.map(async (file) => {
-    //     const fileName = file.name;
-    //     const toFileName = `${fileOut}\\watermark_${fileName}`;
-    //     return sharp(file.path)
-    //       .composite(watermarkBuffers)
-    //       .toFile(toFileName, (err, info) => {
-    //         if (err) {
-    //           return err;
-    //         }
-    //         return {
-    //           outputFilePath: toFileName,
-    //           ...info,
-    //         };
-    //       });
-    //   })
-    // );
-    // resolve(
-    //   allResult.map((item) => {
-    //     if (item.status === 'rejected') {
-    //       return item.reason;
-    //     }
-    //     return item.value;
-    //   })
-    // );
   });
 };
 export default {

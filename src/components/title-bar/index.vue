@@ -1,14 +1,15 @@
 <script setup>
   import SwitchMode from '@/components/switch-mode/index.vue';
+  import logo from '@/assets/logo.png';
 </script>
 
 <template>
   <div class="title-bar">
     <div class="title">
-      <a-image width="20" src="/logo.svg" />
+      <a-image width="20" :src="logo" />
       <span style="margin-left: 5px">图片工具箱</span>
+      <switch-mode />
     </div>
-    <switch-mode />
   </div>
 </template>
 

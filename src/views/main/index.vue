@@ -3,7 +3,12 @@
     <title-bar />
   </a-layout-header>
   <a-layout class="layout-main">
-    <a-layout-sider collapsible :default-collapsed="true" showCollapseButton :width="110">
+    <a-layout-sider
+      collapsible
+      :default-collapsed="true"
+      showCollapseButton
+      :width="110"
+    >
       <a-menu :defaultSelectedKeys="['conversion']">
         <router-link v-for="route in routes" :key="route.name" :to="route.path">
           <a-menu-item :key="route.name">
@@ -26,7 +31,7 @@
   import router from '@/router';
   import TitleBar from '@/components/title-bar/index.vue';
 
-  const routes = router.getRoutes();
+  const routes = router.getRoutes().filter((route) => route.meta?.title);
 </script>
 
 <style scoped>

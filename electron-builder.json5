@@ -1,7 +1,7 @@
 // @see https://www.electron.build/configuration/configuration
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
+  "appId": "Loker-ImgToolbox",
   "asar": true,
   "asarUnpack": [
     "**/node_modules/sharp/**/*",
@@ -16,12 +16,14 @@
     "dist-electron"
   ],
   "mac": {
+    "icon": "public/icon.icns",
     "target": [
       "dmg"
     ],
     "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
   },
   "win": {
+    icon: "public/icon.ico",
     "target": [
       {
         "target": "nsis",

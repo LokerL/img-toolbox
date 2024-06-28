@@ -192,7 +192,6 @@
       Message.error('请上传文件');
       return;
     }
-    console.log(toRawArgs);
     Promise.allSettled(
       tableData.map((item) => {
         return window.api[handleName]({
