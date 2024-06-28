@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
+import log from './log';
 
 /**
  * 创建图片水印
@@ -82,8 +83,10 @@ const apiFormat = (e, options) => {
       .toFormat(formatType)
       .toFile(toFileName, (err, info) => {
         if (err) {
+          log.error(options, err);
           reject(err);
         }
+        log.info(options, info);
         resolve({
           outputFilePath: toFileName,
           id,
@@ -161,8 +164,10 @@ const apiWatermark = async (e, options) => {
       .composite(watermarkBuffers)
       .toFile(toFileName, (err, info) => {
         if (err) {
+          log.error(options, err);
           reject(err);
         }
+        log.info(options, info);
         resolve({
           outputFilePath: toFileName,
           ...info,

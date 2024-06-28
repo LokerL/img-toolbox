@@ -36,6 +36,8 @@
     "vue": "^3.4.21"
   },
   "dependencies": {
+    "electron-log": "^5.1.5",
+    "electron-updater": "^6.2.1",
     "sharp": "^0.33.4",
     "vue-router": "^4.4.0"
   }

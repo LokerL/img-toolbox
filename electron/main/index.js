@@ -3,7 +3,9 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import os from 'node:os';
-import sharpApi from './sharp-api.js';
+import log from './log';
+import sharpApi from './sharp-api';
+import autoUpdater from './update';
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -83,6 +85,7 @@ async function createWindow() {
 app.whenReady().then(async () => {
   await createWindow();
   registerEvent();
+  await autoUpdater.checkForUpdates();
 });
 
 app.on('window-all-closed', () => {
@@ -129,6 +132,4 @@ const registerEvent = () => {
 
   ipcMain.handle('api:watermark', sharpApi.apiWatermark);
 };
-
-const test = async () => {};
-test();
+log.info('Main process started');

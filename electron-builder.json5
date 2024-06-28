@@ -11,6 +11,11 @@
   "directories": {
     "output": "release/${version}"
   },
+  "publish": {
+    "provider": "github",
+    "owner": "LokerL",
+    "repo": "img-toolbox"
+  },
   "files": [
     "dist",
     "dist-electron"
