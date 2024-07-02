@@ -126,10 +126,8 @@ const registerEvent = () => {
       return null;
     }
   });
-  ipcMain.handle('api:format', sharpApi.apiFormat);
 
-  ipcMain.handle('api:getImgUrl', sharpApi.apiGetImgUrl);
-
-  ipcMain.handle('api:watermark', sharpApi.apiWatermark);
+  Object.entries(sharpApi).forEach(([channel, handler]) => {
+    ipcMain.handle(channel, handler);
+  });
 };
-log.info('Main process started');

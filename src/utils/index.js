@@ -5,11 +5,11 @@ export const imageTypes = [
   'png',
   'webp',
   'gif',
-  // 'jp2',
-  // 'tiff',
-  // 'avif',
-  // 'heif',
-  // 'jxl',
+  'jp2',
+  'tiff',
+  'avif',
+  'heif',
+  'jxl',
 ];
 
 export const formatSize = (size) => {
@@ -56,35 +56,4 @@ export const removeReactive = (obj) => {
     }
   }
   return JSON.parse(JSON.stringify(res));
-
-  // const res = {};
-  //
-  // for (const key in obj) {
-  //   if (Object.prototype.hasOwnProperty.call(obj, key)) {
-  //     if (isRef(obj[key])) {
-  //       res[key] = removeReactive(unref(obj[key]));
-  //     } else if (isProxy(obj[key])) {
-  //       res[key] = removeReactive(toRaw(obj[key]));
-  //     } else if (typeof obj[key] === 'object') {
-  //       res[key] = removeReactive(obj[key]);
-  //     }
-  //     // 如果是数组
-  //     else if (Array.isArray(obj[key])) {
-  //       res[key] = obj[key].map((item) => {
-  //         if (isRef(item)) {
-  //           return removeReactive(unref(item));
-  //         } else if (isProxy(item)) {
-  //           return removeReactive(toRaw(item));
-  //         } else if (typeof item === 'object') {
-  //           return removeReactive(item);
-  //         } else {
-  //           return item;
-  //         }
-  //       });
-  //     } else {
-  //       res[key] = obj[key];
-  //     }
-  //   }
-  // }
-  // return res;
 };

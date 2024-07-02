@@ -103,30 +103,24 @@ const apiFormat = (e, options) => {
  * @returns {Promise<{}>} {outputFilePath: string, id: string, ...info}
  */
 const apiResize = (e, options) => {
+  const { name, path, width, height, fit, outputFolder } = options;
   return new Promise((resolve, reject) => {
-    const { id, filePath, width, height, fit, background, fileOut } = options;
-    if (!filePath) {
+    if (!fs.existsSync(path)) {
       reject({ message: '请传入文件路径' });
     }
-    if (!fs.existsSync(filePath)) {
-      reject({ message: '文件不存在' });
-    }
-    const fileName = path.basename(filePath);
-    const toFileName = `${fileOut}\\${fileName}`;
-    sharp(filePath)
-      .resize({
-        width,
-        height,
+    const toFileName = `${outputFolder}\\resize_${name}`;
+    sharp(path)
+      .resize(width, height, {
         fit,
-        background,
       })
       .toFile(toFileName, (err, info) => {
         if (err) {
+          log.error(options, err);
           reject(err);
         }
+        log.info(options, info);
         resolve({
           outputFilePath: toFileName,
-          id,
           ...info,
         });
       });
@@ -140,7 +134,6 @@ const apiResize = (e, options) => {
  */
 const apiWatermark = async (e, options) => {
   const { watermarks, name, path, outputFolder } = options;
-  console.log(options);
   return new Promise(async (resolve, reject) => {
     if (!fs.existsSync(path)) {
       reject({ message: '请传入文件路径' });
@@ -175,8 +168,34 @@ const apiWatermark = async (e, options) => {
       });
   });
 };
+
+const apiExtract = (e, options) => {
+  const { name, path, outputFolder, left, top, width, height } = options;
+  return new Promise((resolve, reject) => {
+    if (!fs.existsSync(path)) {
+      reject({ message: '请传入文件路径' });
+    }
+    const toFileName = `${outputFolder}\\extract_${name}`;
+    sharp(path)
+      .extract({ left, top, width, height })
+      .toFile(toFileName, (err, info) => {
+        if (err) {
+          log.error(options, err);
+          reject(err);
+        }
+        log.info(options, info);
+        resolve({
+          outputFilePath: toFileName,
+          ...info,
+        });
+      });
+  });
+};
+
 export default {
-  apiGetImgUrl,
-  apiFormat,
-  apiWatermark,
+  'api:getImgUrl': apiGetImgUrl,
+  'api:format': apiFormat,
+  'api:watermark': apiWatermark,
+  'api:resize': apiResize,
+  'api:extract': apiExtract,
 };

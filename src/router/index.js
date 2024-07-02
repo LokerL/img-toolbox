@@ -28,16 +28,16 @@ const router = createRouter({
         icon: 'icon-mosaic',
       },
     },
-    // {
-    //   path: '/cut',
-    //   name: 'cut',
-    //   component: () => import('../views/cut/index.vue'),
-    //   meta: {
-    //     title: '裁剪',
-    //     description: '图片裁剪',
-    //     icon: 'icon-scissor',
-    //   },
-    // },
+    {
+      path: '/resize',
+      name: 'resize',
+      component: () => import('../views/resize/index.vue'),
+      meta: {
+        title: '调整',
+        description: '图片尺寸调整',
+        icon: 'icon-fullscreen-exit',
+      },
+    },
     // {
     //   path: '/ocr',
     //   name: 'ocr',
