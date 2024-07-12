@@ -2,17 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [master]
-    paths-ignore:
-      - "**.md"
-      - "**.spec.js"
-      - ".idea"
-      - ".vscode"
-      - ".dockerignore"
-      - "Dockerfile"
-      - ".gitignore"
-      - ".github/**"
-      - "!.github/workflows/build.yml"
+    tags:
+      - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
+
 
 jobs:
   build:
@@ -45,3 +37,16 @@ jobs:
           name: img-toolbox-${{ matrix. os }}
           path: release/*/*.exe
           retention-days: 5
+
+      - name: release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+           dist/*.exe
+           dist/*.exe.blockmap
+           dist/latest.yml
+           draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      
+          
