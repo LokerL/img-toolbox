@@ -70,15 +70,8 @@
 </template>
 
 <script setup>
-  import {
-    reactive,
-    ref,
-    onMounted,
-    onUnmounted,
-    watch,
-    toRaw,
-    callWithErrorHandling,
-  } from 'vue';
+  import { reactive, ref, onMounted, onUnmounted, watch } from 'vue';
+  import { useRouter } from 'vue-router';
   import { getID, removeReactive } from '@/utils';
   import FileSelector from '@/components/file-selector/index.vue';
   import { columns, filters } from './config';
@@ -91,7 +84,7 @@
     },
     startIcon: {
       type: String,
-      default: 'icon-swap',
+      default: () => useRouter().currentRoute.value.meta.icon || 'icon-play',
     },
     startText: {
       type: String,
@@ -177,8 +170,10 @@
     const { args, handleName } = props.startHandleObj;
     // 去除args属性的响应式 args: { RefImpl, RefImpl }
     const toRawArgs = removeReactive(args);
-    // 判断是否有未填写的参数
-    const hasEmpty = Object.values(toRawArgs).some((item) => !item);
+
+    const hasEmpty = Object.values(toRawArgs).some((item) => {
+      return item === undefined || item === null || item === '';
+    });
     if (hasEmpty) {
       Message.error('请填写完整参数');
       return;

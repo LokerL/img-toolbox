@@ -38,16 +38,16 @@ const router = createRouter({
         icon: 'icon-fullscreen-exit',
       },
     },
-    // {
-    //   path: '/ocr',
-    //   name: 'ocr',
-    //   component: () => import('../views/ocr/index.vue'),
-    //   meta: {
-    //     title: '识别',
-    //     description: 'OCR文字识别',
-    //     icon: 'icon-translate',
-    //   },
-    // },
+    {
+      path: '/extract',
+      name: 'extract',
+      component: () => import('../views/extract/index.vue'),
+      meta: {
+        title: '裁剪',
+        description: '图片裁剪',
+        icon: 'icon-scissor',
+      },
+    },
   ],
 });
 
