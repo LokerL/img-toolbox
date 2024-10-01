@@ -26,7 +26,7 @@
   "devDependencies": {
     "@arco-design/web-vue": "^2.55.3",
     "@vitejs/plugin-vue": "^5.0.4",
-    "electron": "^31.1.0",
+    "electron": "^32.1.2",
     "electron-builder": "^24.13.3",
     "prettier": "^3.3.2",
     "typescript": "^5.4.2",
