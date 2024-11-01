@@ -27,7 +27,7 @@
     "@arco-design/web-vue": "^2.55.3",
     "@vitejs/plugin-vue": "^5.0.4",
     "electron": "^31.1.0",
-    "electron-builder": "^24.13.3",
+    "electron-builder": "^25.1.8",
     "prettier": "^3.3.2",
     "typescript": "^5.4.2",
     "vite": "^5.1.5",
