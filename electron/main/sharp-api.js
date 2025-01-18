@@ -192,10 +192,105 @@ const apiExtract = (e, options) => {
   });
 };
 
+const apiCombine = (e, options) => {
+  const { files, direction, outputFolder, name } = options;
+  return new Promise((resolve, reject) => {
+    if (!files || !files.length) {
+      reject({ message: '请传入需要拼接的图片' });
+    }
+    if (!name) {
+      reject({ message: '请传入文件名' });
+    }
+    // 如果文件名没有后缀，则添加.png
+    if (!name.includes('.')) {
+      name += '.png';
+    }
+
+    const toFileName = `${outputFolder}\\${name}`;
+
+    // 创建sharp实例数组，使用files数组中的path属性
+    const inputs = files.map((file) => {
+      if (!fs.existsSync(file.path)) {
+        reject({ message: `文件不存在: ${file.path}` });
+      }
+      return sharp(file.path);
+    });
+
+    // 获取所有图片的元信息
+    Promise.all(inputs.map((input) => input.metadata()))
+      .then((metadata) => {
+        // 计算拼接后的尺寸
+        let totalWidth = 0;
+        let totalHeight = 0;
+        let maxWidth = 0;
+        let maxHeight = 0;
+
+        metadata.forEach((meta) => {
+          if (direction === 'horizontal') {
+            totalWidth += meta.width;
+            maxHeight = Math.max(maxHeight, meta.height);
+          } else {
+            totalHeight += meta.height;
+            maxWidth = Math.max(maxWidth, meta.width);
+          }
+        });
+
+        // 创建背景画布
+        const canvas = sharp({
+          create: {
+            width: direction === 'horizontal' ? totalWidth : maxWidth,
+            height: direction === 'horizontal' ? maxHeight : totalHeight,
+            channels: 4,
+            background: { r: 0, g: 0, b: 0, alpha: 0 },
+          },
+        });
+
+        // 计算每张图片的位置
+        let position = 0;
+        const composites = files.map((file, index) => {
+          const item = {
+            input: file.path, // 使用file.path而不是file
+            gravity: 'northwest',
+          };
+
+          if (direction === 'horizontal') {
+            item.left = position;
+            item.top = 0;
+            position += metadata[index].width;
+          } else {
+            item.left = 0;
+            item.top = position;
+            position += metadata[index].height;
+          }
+
+          return item;
+        });
+
+        // 执行合成
+        canvas.composite(composites).toFile(toFileName, (err, info) => {
+          if (err) {
+            log.error(options, err);
+            reject(err);
+          }
+          log.info(options, info);
+          resolve({
+            outputFilePath: toFileName,
+            ...info,
+          });
+        });
+      })
+      .catch((err) => {
+        log.error(options, err);
+        reject(err);
+      });
+  });
+};
+
 export default {
   'api:getImgUrl': apiGetImgUrl,
   'api:format': apiFormat,
   'api:watermark': apiWatermark,
   'api:resize': apiResize,
   'api:extract': apiExtract,
+  'api:combine': apiCombine,
 };

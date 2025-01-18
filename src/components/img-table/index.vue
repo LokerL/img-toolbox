@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-  import { reactive, ref, onMounted, onUnmounted, watch } from 'vue';
+  import { reactive, ref, onMounted, onUnmounted, watch, toRaw } from 'vue';
   import { useRouter } from 'vue-router';
   import { getID, removeReactive } from '@/utils';
   import FileSelector from '@/components/file-selector/index.vue';
@@ -94,6 +94,10 @@
       type: Object,
       default: () => {},
     },
+    cancelDefaultStart: {
+      type: Boolean,
+      default: false,
+    },
   });
 
   const outputFolder = defineModel('outputFolder', {
@@ -101,7 +105,7 @@
     default: '',
   });
 
-  const emit = defineEmits(['checkInputs']);
+  const emit = defineEmits(['checkInputs', 'handleBtnClick']);
 
   const tableData = reactive([]);
   const scroll = reactive({ y: `${window.innerHeight - 160}px` });
@@ -159,12 +163,13 @@
     visible.value = true;
   };
 
-  const startBtnClick = () => {
-    // 检查输入
-    let checkResult = true;
-    emit('checkInputs', (result) => {
-      checkResult = result;
+  const startBtnClick = async () => {
+    const checkResult = await new Promise((resolve) => {
+      emit('checkInputs', (result) => {
+        resolve(result);
+      });
     });
+
     if (!checkResult) return;
 
     const { args, handleName } = props.startHandleObj;
@@ -187,6 +192,12 @@
       Message.error('请上传文件');
       return;
     }
+    emit('handleBtnClick', {
+      tableData: toRaw(tableData),
+      outputFolder: outputFolder.value,
+    });
+    if (props.cancelDefaultStart) return;
+
     Promise.allSettled(
       tableData.map((item) => {
         return window.api[handleName]({

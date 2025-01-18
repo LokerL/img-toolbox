@@ -1,6 +1,6 @@
 {
   "name": "img-toolbox",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "dist-electron/main/index.js",
   "description": "图片工具箱.",
   "author": "loker <loker80@qq.com>",

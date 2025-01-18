@@ -9,7 +9,14 @@ contextBridge.exposeInMainWorld('dialog', {
   openFile: (options) => ipcRenderer.invoke('dialog:openFile', options),
 });
 
-const apiList = ['format', 'getImgUrl', 'watermark', 'resize', 'extract'];
+const apiList = [
+  'format',
+  'getImgUrl',
+  'watermark',
+  'resize',
+  'extract',
+  'combine',
+];
 
 const apiMethods = {};
 apiList.forEach((api) => {

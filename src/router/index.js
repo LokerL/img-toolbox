@@ -48,6 +48,16 @@ const router = createRouter({
         icon: 'icon-scissor',
       },
     },
+    {
+      path: '/combine',
+      name: 'combine',
+      component: () => import('../views/combine/index.vue'),
+      meta: {
+        title: '拼接',
+        description: '图片拼接',
+        icon: 'icon-apps',
+      },
+    },
   ],
 });
 
